@@ -1,0 +1,342 @@
+/* =========================================================
+   SONY FX3 CINEMA NAVBAR RIG
+   Theme: Cyan (#00D4FF) to Deep Navy (#010714)
+   ========================================================= */
+
+.fx3-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  background: rgba(1, 7, 20, 0.92);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fx3-navbar.is-scrolled {
+  background: rgba(1, 7, 20, 0.98);
+  border-bottom-color: rgba(0, 212, 255, 0.35);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8),
+              0 0 20px rgba(0, 212, 255, 0.08);
+}
+
+.fx3-nav-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   1. LEFT: BRAND IDENTIFIER
+   ========================================================= */
+
+.fx3-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Avatar Badge */
+.fx3-brand-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  background: #00d4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fx3-nav-brand:hover .fx3-brand-avatar {
+  transform: scale(1.05);
+  box-shadow: 0 0 22px rgba(0, 212, 255, 0.7);
+}
+
+.brand-avatar-initial {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  color: #010714;
+  line-height: 1;
+}
+
+.fx3-brand-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* "PAWAN EDITS" Typography */
+.fx3-brand-title {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  color: #ffffff;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* "FILM | EDIT | CREATE" Typography */
+.fx3-brand-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #8da4c4;
+  margin-top: 3px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   2. CENTER: HARDWARE TELEMETRY OSD
+   ========================================================= */
+
+.fx3-nav-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(2, 13, 36, 0.7);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 6px;
+  user-select: none;
+}
+
+.telemetry-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(1, 7, 20, 0.85);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* REC Flasher */
+.rec-chip {
+  border-color: rgba(255, 59, 48, 0.35);
+}
+
+.rec-blip {
+  color: #ff3b30;
+  font-size: 10px;
+  animation: navRecPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes navRecPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.telemetry-lbl {
+  font-weight: 900;
+  color: #ff3b30;
+  font-size: 9px;
+}
+
+/* SMPTE Clock */
+.tc-clock-icon {
+  font-size: 10px;
+  color: #00d4ff;
+}
+
+.tc-chip .telemetry-val {
+  color: #00d4ff;
+  font-weight: 700;
+}
+
+/* Codec Metadata */
+.codec-chip .telemetry-val {
+  color: #c0d3ef;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.telemetry-div {
+  color: rgba(0, 212, 255, 0.35);
+  font-size: 9px;
+}
+
+/* Availability Status */
+.slots-chip {
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.slot-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d4ff;
+  box-shadow: 0 0 6px #00d4ff;
+  animation: navRecPulse 2s infinite ease-in-out;
+}
+
+.slots-chip .telemetry-val {
+  color: #00d4ff;
+  font-weight: 800;
+  font-size: 9px;
+}
+
+/* =========================================================
+   3. RIGHT: LINKS & INITIATE PROJECT BUTTON
+   ========================================================= */
+
+.fx3-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.fx3-nav-link {
+  background: transparent;
+  border: none;
+  font-family: monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.fx3-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 1.5px;
+  background: #00d4ff;
+  box-shadow: 0 0 6px #00d4ff;
+  transition: width 0.25s ease;
+}
+
+.fx3-nav-link:hover {
+  color: #ffffff;
+}
+
+.fx3-nav-link:hover::after {
+  width: 100%;
+}
+
+/* Initiate Project CTA */
+.fx3-nav-initiate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: rgba(2, 13, 36, 0.85);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  border-radius: 3px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.25s ease;
+}
+
+.initiate-bracket {
+  font-family: monospace;
+  font-size: 11px;
+  color: #00d4ff;
+  font-weight: 900;
+}
+
+.initiate-text {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #ffffff;
+}
+
+.fx3-nav-initiate-btn:hover {
+  background: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.45);
+}
+
+.fx3-nav-initiate-btn:hover .initiate-bracket,
+.fx3-nav-initiate-btn:hover .initiate-text {
+  color: #010714;
+}
+
+/* =========================================================
+   RESPONSIVE (Mobile & Tablets)
+   ========================================================= */
+
+@media (max-width: 1150px) {
+  .codec-chip {
+    display: none;
+  }
+}
+
+@media (max-width: 950px) {
+  .fx3-nav-telemetry {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .fx3-navbar {
+    height: 52px;
+  }
+
+  .fx3-nav-container {
+    padding: 0 14px;
+  }
+
+  .fx3-nav-link {
+    display: none;
+  }
+
+  .fx3-brand-title {
+    font-size: 13.5px;
+  }
+
+  .fx3-brand-subtitle {
+    font-size: 7px;
+    letter-spacing: 1.4px;
+  }
+
+  .fx3-brand-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .brand-avatar-initial {
+    font-size: 16px;
+  }
+
+  .fx3-nav-initiate-btn {
+    padding: 6px 10px;
+  }
+
+  .initiate-text {
+    font-size: 9px;
+    letter-spacing: 0.8px;
+  }
+}

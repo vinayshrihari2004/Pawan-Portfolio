@@ -1,0 +1,679 @@
+/* =========================================================
+   CASE STUDIES // 3D FLIPPABLE MAGAZINE RACK
+   Theme: Cyan (#00D4FF) to Deep Navy (#020D24)
+   ========================================================= */
+
+.case-studies-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 100px 6% 90px;
+  box-sizing: border-box;
+  background: radial-gradient(ellipse at 50% 15%, #05244f 0%, #020d24 60%, #010714 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Ambient Radial Glow */
+.cs-ambient-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate3d(-50%, -30%, 0);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Section Header */
+.cs-header-block {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.cs-header-tag {
+  display: block;
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00d4ff;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cs-headline {
+  font-size: clamp(2.3rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.cs-headline span {
+  background: linear-gradient(90deg, #00d4ff 0%, #3dbdff 50%, #8be9ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(0, 212, 255, 0.35);
+}
+
+.cs-header-sub {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* =========================================================
+   3-COVER RACK DISPLAY
+   ========================================================= */
+.covers-rack-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 350px));
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* 3D Flipper Shell */
+.mag-flipper-box {
+  position: relative;
+  width: 100%;
+  height: 570px;
+  perspective: 1600px;
+}
+
+.mag-card-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  cursor: pointer;
+  border-radius: 14px;
+}
+
+.mag-card-3d.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Face Rules */
+.mag-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   FRONT FACE: THE MAGAZINE COVER
+   ========================================================= */
+.mag-front {
+  background: linear-gradient(165deg, #07386d 0%, #020d24 50%, #010714 100%);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85),
+              0 0 20px rgba(0, 212, 255, 0.1);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.mag-card-3d:hover .mag-front {
+  border-color: #00d4ff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95),
+              0 0 35px rgba(0, 212, 255, 0.3);
+}
+
+.mag-inner-border {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.mag-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 13, 36, 0) 30%,
+    rgba(2, 13, 36, 0.5) 55%,
+    rgba(1, 7, 20, 0.94) 80%,
+    #010714 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Top Strip */
+.mag-header-strip {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 7;
+  font-family: monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #00d4ff;
+}
+
+.mag-issue-badge {
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+/* Masthead */
+.mag-masthead {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: "Georgia", "Playfair Display", serif;
+  font-size: 3.4rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  z-index: 1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+}
+
+/* Portrait */
+.creator-cutout-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.creator-image {
+  width: 100%;
+  height: 72%;
+  object-fit: cover;
+  object-position: top center;
+  margin-top: 36px;
+  display: block;
+}
+
+/* Teasers */
+.cover-lines-left {
+  position: absolute;
+  top: 155px;
+  left: 14px;
+  max-width: 110px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cover-lines-right {
+  position: absolute;
+  top: 175px;
+  right: 14px;
+  max-width: 105px;
+  text-align: right;
+  z-index: 5;
+}
+
+.teaser-block {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+}
+
+.teaser-kicker {
+  display: block;
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #00d4ff;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.teaser-kicker.accent-tag {
+  background: #00d4ff;
+  color: #010714;
+  display: inline-block;
+  padding: 1px 4px;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.teaser-text {
+  margin: 0;
+  font-size: 8px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #e2ecf9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Story Block */
+.mag-main-story {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 56px;
+  z-index: 5;
+}
+
+.story-header-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.main-kicker {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #00d4ff;
+  text-transform: uppercase;
+}
+
+.story-sep {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.story-vol {
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: #94a9c9;
+  text-transform: uppercase;
+}
+
+.creator-subject-name {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  margin: 0 0 3px 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.story-hero-title {
+  font-family: "Georgia", "Playfair Display", serif;
+  color: #00d4ff;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 5px 0;
+  letter-spacing: 0.5px;
+}
+
+.story-abstract {
+  color: #94a9c9;
+  font-size: 8.5px;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 95%;
+}
+
+/* Footer & Barcode */
+.mag-bottom-bar {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 1px solid rgba(0, 212, 255, 0.18);
+  padding-top: 8px;
+  z-index: 7;
+}
+
+.mag-barcode-sticker {
+  background: #ffffff;
+  padding: 3px 5px 2px;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  height: auto;
+}
+
+.barcode-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mag-footer-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mag-footer-cta .cta-label {
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1.2px;
+  color: #94a9c9;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mag-footer-cta .cta-arrow {
+  font-family: monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #00d4ff;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   BACK FACE: IMPACT STATS (ANALYTICS RIG)
+   ========================================================= */
+.mag-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(175deg, #020d24 0%, #010714 100%);
+  border: 1.5px solid #00d4ff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95),
+              0 0 35px rgba(0, 212, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 18px;
+}
+
+.stats-back-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.22);
+  padding-bottom: 12px;
+}
+
+.stats-back-heading {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.stats-back-subhead {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #00d4ff;
+}
+
+.stats-back-dots {
+  display: flex;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.stats-back-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #00d4ff;
+}
+
+/* 4 STAT MODULES */
+.stats-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: auto 0;
+}
+
+.stat-module {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  background: rgba(2, 13, 36, 0.8);
+  border: 1px solid rgba(0, 212, 255, 0.18);
+  border-radius: 10px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-module:hover {
+  transform: translateX(3px);
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.stat-icon-disc {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-disc svg {
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.6));
+}
+
+.stat-text-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.stat-number {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #00d4ff;
+}
+
+.stat-sub {
+  font-family: monospace;
+  font-size: 7px;
+  color: #8da4c4;
+}
+
+/* Trend Graph */
+.stat-chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.stat-arrow-indicator {
+  color: #00d4ff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.stat-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 18px;
+  width: 24px;
+}
+
+.stat-chart-bars span {
+  width: 3.5px;
+  background: linear-gradient(180deg, #00d4ff 0%, #0066aa 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(0, 212, 255, 0.5);
+  animation: barRise 1s ease-out;
+}
+
+@keyframes barRise {
+  from { height: 0%; }
+}
+
+/* Back Footer */
+.stats-back-footer {
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 212, 255, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stats-quote {
+  font-family: "Georgia", serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.stats-author {
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1.2px;
+  color: #00d4ff;
+}
+
+.stats-flip-back {
+  font-family: monospace;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8da4c4;
+  margin-top: 4px;
+}
+
+/* =========================================================
+   CURVED HANDWRITTEN HINT
+   ========================================================= */
+.cs-flip-curved-hint {
+  position: absolute;
+  top: 42%;
+  right: -58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 20;
+  pointer-events: none;
+  animation: hintFloat 3s infinite ease-in-out;
+  transition: opacity 0.3s ease;
+}
+
+.cs-flip-curved-hint.is-hidden {
+  opacity: 0;
+}
+
+.cs-handwritten-text {
+  font-family: "Brush Script MT", "Caveat", "Segoe Script", cursive;
+  font-size: 1.3rem;
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+  transform: rotate(-12deg);
+  white-space: nowrap;
+}
+
+.cs-curved-arrow {
+  width: 65px;
+  height: 32px;
+}
+
+@keyframes hintFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (Tablets & Mobile)
+   ========================================================= */
+@media (max-width: 1024px) {
+  .covers-rack-container {
+    grid-template-columns: repeat(2, minmax(260px, 340px));
+    gap: 20px;
+  }
+  .cs-flip-curved-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .case-studies-section {
+    padding: 80px 4% 60px;
+  }
+
+  .covers-rack-container {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+
+  .mag-flipper-box {
+    height: 530px;
+  }
+
+  .mag-masthead {
+    font-size: 3rem;
+  }
+}

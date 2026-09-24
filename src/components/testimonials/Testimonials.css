@@ -1,0 +1,442 @@
+/* =========================================================
+   VERTICAL 9:16 TESTIMONIALS (SWIPE ENABLED)
+   Theme: Cyan (#00D4FF) to Deep Navy (#020D24)
+   ========================================================= */
+
+.testimonials-section {
+  position: relative;
+  min-height: 100vh;
+  padding: 120px 6% 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.t-section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.t-pre-tag {
+  display: inline-block;
+  font-family: monospace;
+  color: #00d4ff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.t-title {
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+}
+
+.t-title span {
+  background: linear-gradient(90deg, #00d4ff 0%, #3dbdff 50%, #8be9ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(0, 212, 255, 0.35);
+}
+
+.t-sub-hint {
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #7b94b8;
+  margin: 0;
+}
+
+/* =========================================================
+   CAROUSEL STAGE & LIGHTING
+   ========================================================= */
+
+.t-carousel-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1600px;
+  cursor: grab;
+  user-select: none;
+  z-index: 2;
+}
+
+.t-carousel-stage:active {
+  cursor: grabbing;
+}
+
+.t-stage-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+  filter: blur(120px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* =========================================================
+   BASE VERTICAL 9:16 CARD
+   ========================================================= */
+
+.t-card {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #010714;
+  user-select: none;
+  box-sizing: border-box;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+.t-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.t-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 13, 36, 0.4) 0%,
+    rgba(1, 7, 20, 0.15) 35%,
+    rgba(0, 4, 12, 0.95) 100%
+  );
+  z-index: 1;
+}
+
+/* =========================================================
+   SCOPED CARD STATES (VERTICAL 9:16 REELS)
+   ========================================================= */
+
+/* ACTIVE MAIN VERTICAL CARD (9:16) */
+.t-card.t-card-active {
+  width: 340px;
+  height: 600px;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  z-index: 10;
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95),
+              0 0 35px rgba(0, 212, 255, 0.2);
+}
+
+.t-card.t-card-active.dragging {
+  transition: none !important;
+}
+
+.t-card.t-card-active:hover {
+  box-shadow: 0 30px 85px rgba(0, 0, 0, 0.98),
+              0 0 50px rgba(0, 212, 255, 0.35);
+}
+
+/* LEFT SIDE CARD (PREV) */
+.t-card.t-card-left {
+  width: 270px;
+  height: 480px;
+  left: 50%;
+  transform: translateX(calc(-50% - 310px)) scale(0.85) rotateY(18deg);
+  opacity: 0.35;
+  filter: blur(2px) brightness(0.6);
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* RIGHT SIDE CARD (NEXT) */
+.t-card.t-card-right {
+  width: 270px;
+  height: 480px;
+  left: 50%;
+  transform: translateX(calc(-50% + 310px)) scale(0.85) rotateY(-18deg);
+  opacity: 0.35;
+  filter: blur(2px) brightness(0.6);
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.t-card.t-card-left:hover,
+.t-card.t-card-right:hover {
+  opacity: 0.65;
+  filter: blur(0px) brightness(0.85);
+}
+
+.t-side-tag {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #00d4ff;
+  background: rgba(1, 7, 20, 0.85);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 2px;
+  z-index: 3;
+}
+
+/* =========================================================
+   HUD ELEMENTS (Active Reel)
+   ========================================================= */
+
+.t-hud-top-bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 6;
+}
+
+.t-rec-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(1, 7, 20, 0.8);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.t-rec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30;
+  animation: tBlink 1.2s infinite ease-in-out;
+}
+
+.t-rec-text {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #00d4ff;
+}
+
+.t-hud-aspect {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #7b94b8;
+  letter-spacing: 1px;
+}
+
+/* 9:16 Center Safe Frame Border */
+.t-safe-frame {
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(0, 212, 255, 0.2);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Central Play Trigger */
+.t-play-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.t-play-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 13, 36, 0.7);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.t-play-triangle {
+  font-size: 1.1rem;
+  color: #00d4ff;
+  margin-left: 3px;
+}
+
+.t-card.t-card-active:hover .t-play-circle {
+  transform: scale(1.1);
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+  box-shadow: 0 0 35px rgba(0, 212, 255, 0.45);
+}
+
+/* Client Meta Box */
+.t-client-meta {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 24px;
+  z-index: 6;
+  text-align: left;
+}
+
+.t-client-spec {
+  font-family: monospace;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #00d4ff;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.t-client-name {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  color: #ffffff;
+  margin: 0 0 2px;
+}
+
+.t-client-role {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #94a9c9;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* =========================================================
+   ARROW CONTROLS
+   ========================================================= */
+
+.t-nav-arrow {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(2, 13, 36, 0.85);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 20;
+}
+
+.t-nav-arrow:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: scale(1.08);
+}
+
+.t-arrow-prev {
+  left: 6%;
+}
+
+.t-arrow-next {
+  right: 6%;
+}
+
+/* =========================================================
+   PAGINATION DOTS
+   ========================================================= */
+
+.t-pagination-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 30px;
+  z-index: 5;
+}
+
+.t-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.t-dot.active-dot {
+  background: #00d4ff;
+  box-shadow: 0 0 10px #00d4ff;
+  transform: scale(1.3);
+}
+
+/* =========================================================
+   ANIMATIONS & RESPONSIVE
+   ========================================================= */
+
+@keyframes tBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (max-width: 900px) {
+  .t-card.t-card-left {
+    transform: translateX(calc(-50% - 240px)) scale(0.8) rotateY(15deg);
+    width: 220px;
+    height: 390px;
+  }
+  .t-card.t-card-right {
+    transform: translateX(calc(-50% + 240px)) scale(0.8) rotateY(-15deg);
+    width: 220px;
+    height: 390px;
+  }
+  .t-arrow-prev { left: 2%; }
+  .t-arrow-next { right: 2%; }
+}
+
+@media (max-width: 680px) {
+  .t-card.t-card-left,
+  .t-card.t-card-right {
+    display: none;
+  }
+  .t-card.t-card-active {
+    width: 300px;
+    height: 530px;
+  }
+  .t-carousel-stage {
+    min-height: 550px;
+  }
+}

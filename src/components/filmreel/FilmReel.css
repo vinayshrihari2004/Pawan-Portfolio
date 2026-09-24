@@ -1,0 +1,314 @@
+/* =========================================================
+   35MM CINEMA FILM REEL // HARDWARE CELLULOID TRACK
+   Theme: Cyan (#00D4FF) to Deep Navy (#020D24)
+   ========================================================= */
+
+.film-section {
+  position: relative;
+  width: 100%;
+  padding: 85px 0 95px;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transform: translateZ(0); /* Offloads scroll pass to GPU */
+}
+
+/* Background Atmospheric Glow */
+.film-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.film-heading {
+  text-align: center;
+  margin-bottom: 45px;
+  position: relative;
+  z-index: 2;
+  padding: 0 4%;
+}
+
+.film-pre-tag {
+  display: inline-block;
+  font-family: monospace;
+  color: #00d4ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.film-main-title {
+  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+
+.film-main-title span {
+  background: linear-gradient(90deg, #00d4ff 0%, #3dbdff 50%, #8be9ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(0, 212, 255, 0.35);
+}
+
+.film-sub-text {
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #7b94b8;
+  margin: 0;
+}
+
+/* =========================================================
+   FILM WRAPPER & OPTICAL VIGNETTES
+   ========================================================= */
+
+.film-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+}
+
+/* Dual Edge Optical Vignettes (Prevents hard clipping edges) */
+.film-edge-vignette {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.film-edge-vignette.left {
+  left: 0;
+  background: linear-gradient(90deg, #020024 0%, rgba(2, 0, 36, 0.8) 40%, transparent 100%);
+}
+
+.film-edge-vignette.right {
+  right: 0;
+  background: linear-gradient(270deg, #020024 0%, rgba(2, 0, 36, 0.8) 40%, transparent 100%);
+}
+
+/* =========================================================
+   CONTINUOUS HARDWARE ACCELERATED STRIP
+   ========================================================= */
+
+.film-strip {
+  display: flex;
+  gap: 0; /* Continuous spooling celluloid frames */
+  width: max-content;
+  padding: 30px 0;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(1, 7, 20, 0.98) 0%,
+    rgba(2, 13, 36, 0.95) 50%,
+    rgba(1, 7, 20, 0.98) 100%
+  );
+  border-top: 1px solid rgba(0, 212, 255, 0.25);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8), 0 10px 40px rgba(0, 0, 0, 0.7);
+
+  /* PURE GPU-ACCELERATED TRANSLATE: Zero layout recalculations */
+  animation: smoothInfiniteSpool 40s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.film-strip:hover {
+  animation-play-state: paused;
+}
+
+/* 35mm SPROCKET HOLE PERFORATIONS (TOP & BOTTOM) */
+.film-strip::before,
+.film-strip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 10px,
+    rgba(0, 212, 255, 0.7) 10px,
+    rgba(0, 212, 255, 0.7) 20px,
+    transparent 20px,
+    transparent 30px
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
+.film-strip::before {
+  top: 7px;
+}
+
+.film-strip::after {
+  bottom: 7px;
+}
+
+/* =========================================================
+   FILM FRAME CANVAS
+   ========================================================= */
+
+.film-frame {
+  position: relative;
+  flex-shrink: 0;
+  width: 320px;
+  height: 185px;
+  overflow: hidden;
+  background: #010714;
+  border-left: 2px solid rgba(0, 212, 255, 0.2);
+  border-right: 2px solid rgba(0, 212, 255, 0.2);
+  user-select: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* Corner Reticle Ticks */
+.frame-corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: rgba(0, 212, 255, 0.5);
+  border-style: solid;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.frame-corner.top-left { top: 6px; left: 6px; border-width: 1.5px 0 0 1.5px; }
+.frame-corner.top-right { top: 6px; right: 6px; border-width: 1.5px 1.5px 0 0; }
+.frame-corner.bottom-left { bottom: 6px; left: 6px; border-width: 0 0 1.5px 1.5px; }
+.frame-corner.bottom-right { bottom: 6px; right: 6px; border-width: 0 1.5px 1.5px 0; }
+
+/* Film Stock Edge Telemetry */
+.frame-telemetry {
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 5;
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #00d4ff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Imagery */
+.film-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85) contrast(1.05);
+  transform: scale(1.01);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  display: block;
+}
+
+.film-frame:hover img {
+  transform: scale(1.06);
+  filter: brightness(1) contrast(1.1);
+}
+
+/* Lower Darkening Overlay for Typography */
+.film-frame-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(1, 7, 20, 0.3) 50%,
+    rgba(0, 4, 12, 0.92) 100%
+  );
+  z-index: 4;
+}
+
+.creator-handle {
+  font-family: monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #00d4ff;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.creator-name {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+
+/* =========================================================
+   60FPS HARDWARE-ACCELERATED SPOOL KEYFRAME
+   ========================================================= */
+
+@keyframes smoothInfiniteSpool {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    /* Exact 50% shift to ensure pixel-perfect continuous wrap */
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (Tablets & Mobile)
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .film-frame {
+    width: 270px;
+    height: 155px;
+  }
+}
+
+@media (max-width: 768px) {
+  .film-section {
+    padding: 60px 0 70px;
+  }
+
+  .film-edge-vignette {
+    width: 60px;
+  }
+
+  .film-strip {
+    padding: 24px 0;
+  }
+
+  .film-frame {
+    width: 220px;
+    height: 130px;
+  }
+
+  .creator-name {
+    font-size: 0.98rem;
+  }
+}
