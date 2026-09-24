@@ -96,7 +96,7 @@ export default function CreatorStyles() {
                   loop
                   autoPlay
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                 />
 
                 {/* Subtle Centered Hover Play Cue */}

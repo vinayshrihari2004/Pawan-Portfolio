@@ -56,7 +56,7 @@ export default function Hero() {
           <div className="hero-frameless-stage">
             <div className="hero-cutout-wrapper">
               <img
-                src="/pawan.png"
+                src="/pawan.webp"
                 alt="Pawan - Video Editor & Motion Designer"
                 className="hero-frameless-img"
               />

@@ -52,7 +52,7 @@ const covers = [
     ],
     rightTeasers: [{ tag: "SCALE", text: "1M+ Views Architecture" }],
     barcode: "9 771234 567003",
-    image: "/ishan.png",
+    image: "/ishan.webp",
     stats: {
       views: { num: 312, prefix: "+", suffix: "%", label: "VIEWS INCREASED", sub: "From 240K to 990K" },
       subs: { num: 48, prefix: "+", suffix: "%", label: "SUBSCRIBERS GAINED", sub: "From 52K to 77K" },
@@ -78,7 +78,7 @@ const covers = [
     ],
     rightTeasers: [{ tag: "STRATEGY", text: "Executive Talking-Head" }],
     barcode: "9 772049 332008",
-    image: "/nandini.png",
+    image: "/nandini.webp",
     stats: {
       views: { num: 440, prefix: "+", suffix: "%", label: "VIEWS INCREASED", sub: "From 120K to 650K" },
       subs: { num: 65, prefix: "+", suffix: "%", label: "SUBSCRIBERS GAINED", sub: "From 30K to 49.5K" },
@@ -104,7 +104,7 @@ const covers = [
     ],
     rightTeasers: [{ tag: "CRAFT", text: "60 FPS Master Export" }],
     barcode: "9 770829 471001",
-    image: "/saptarshi.png",
+    image: "/saptarshi.webp",
     stats: {
       views: { num: 280, prefix: "+", suffix: "%", label: "VIEWS INCREASED", sub: "From 310K to 1.18M" },
       subs: { num: 54, prefix: "+", suffix: "%", label: "SUBSCRIBERS GAINED", sub: "From 84K to 130K" },

@@ -181,7 +181,7 @@ export default function EditSuite() {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
             />
 
             <button
@@ -256,7 +256,7 @@ export default function EditSuite() {
                       muted
                       loop
                       playsInline
-                      preload="auto"
+                      preload="none"
                       className="es-node-mini-video"
                     />
                   </span>
