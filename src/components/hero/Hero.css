@@ -155,7 +155,7 @@
 
 .metric-lbl {
   font-family: monospace;
-  font-size: 7.5px;
+  font-size: max(12px, 0.75rem);
   font-weight: 700;
   letter-spacing: 1px;
   color: #00d4ff;
@@ -185,6 +185,8 @@
   width: 100%;
   max-width: 580px;
   height: 620px;
+  aspect-ratio: 580 / 620; /* Fixed aspect ratio to eliminate layout shift */
+  contain: layout paint;    /* Isolates subtree paint to eliminate CLS */
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -240,7 +242,8 @@
 /* Cutout Image with Controlled Opacity & Cyan Edge Light */
 .hero-frameless-img {
   max-height: 590px;
-  width: auto;
+  width: 100%;
+  height: auto;
   object-fit: contain;
   object-position: bottom center;
   display: block;
@@ -290,6 +293,13 @@
   z-index: 5;
   user-select: none;
   white-space: nowrap;
+  
+  /* GPU Compositing layer to prevent main-thread layout thrashing */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -333,7 +343,7 @@
 
 .pill-subhead {
   font-family: monospace;
-  font-size: 7.5px;
+  font-size: max(12px, 0.75rem);
   font-weight: 700;
   letter-spacing: 1px;
   color: #00d4ff;
@@ -380,7 +390,7 @@
   animation: floatPillC 8.5s ease-in-out infinite;
 }
 
-/* Keyframes */
+/* Hardware Accelerated Keyframes */
 @keyframes floatPillA {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, -8px, 0); }
@@ -438,6 +448,7 @@
   .hero-frameless-stage {
     max-width: 440px;
     height: 520px;
+    aspect-ratio: 440 / 520;
   }
 
   .hero-frameless-img {
@@ -453,6 +464,7 @@
   .hero-frameless-stage {
     max-width: 320px;
     height: 460px;
+    aspect-ratio: 320 / 460;
   }
 
   .hero-frameless-img {
@@ -472,11 +484,11 @@
   }
 
   .pill-head {
-    font-size: 0.65rem;
+    font-size: max(12px, 0.7rem);
   }
 
   .pill-subhead {
-    font-size: 6.5px;
+    font-size: 12px;
   }
 
   .pill-viral { top: 25px; left: 0; }
@@ -506,6 +518,7 @@
   .hero-frameless-stage {
     max-width: 270px;
     height: 400px;
+    aspect-ratio: 270 / 400;
   }
 
   .hero-frameless-img {
