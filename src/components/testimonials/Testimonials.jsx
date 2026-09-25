@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Testimonials.css";
 import testimonials from "./testimonialsData";
 
-const SLIDE_DURATION = 1000; // 1-second fast cycle interval
+const SLIDE_DURATION = 1000; // 1-second auto-slide interval
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
@@ -11,9 +11,17 @@ export default function Testimonials() {
   const [isPaused, setIsPaused] = useState(false);
   const startX = useRef(0);
 
-  const total = testimonials.length;
+  const total = Array.isArray(testimonials) ? testimonials.length : 0;
+
+  // Defensive check: don't render if data array is empty or undefined
+  if (total === 0) return null;
+
   const prev = (active - 1 + total) % total;
   const next = (active + 1) % total;
+
+  const currentItem = testimonials[active] || {};
+  const prevItem = testimonials[prev] || {};
+  const nextItem = testimonials[next] || {};
 
   const handleNext = useCallback(() => {
     setActive((curr) => (curr + 1) % total);
@@ -23,18 +31,18 @@ export default function Testimonials() {
     setActive((curr) => (curr - 1 + total) % total);
   }, [total]);
 
-  // Fast 1-second auto-slide interval (pauses while hovering or dragging)
+  // Auto-slide interval
   useEffect(() => {
-    if (isPaused || isDragging) return;
+    if (isPaused || isDragging || total <= 1) return;
 
     const timer = setInterval(() => {
       handleNext();
     }, SLIDE_DURATION);
 
     return () => clearInterval(timer);
-  }, [isPaused, isDragging, handleNext]);
+  }, [isPaused, isDragging, handleNext, total]);
 
-  // Touch handlers for mobile devices
+  // Touch handlers
   const handleTouchStart = (e) => {
     startX.current = e.touches[0].clientX;
     setIsDragging(true);
@@ -53,7 +61,7 @@ export default function Testimonials() {
     setDragOffset(0);
   };
 
-  // Mouse drag handlers for desktop
+  // Mouse drag handlers
   const handleMouseDown = (e) => {
     startX.current = e.clientX;
     setIsDragging(true);
@@ -72,8 +80,6 @@ export default function Testimonials() {
     setDragOffset(0);
   };
 
-  if (!testimonials || testimonials.length === 0) return null;
-
   return (
     <section
       className="testimonials-section"
@@ -81,7 +87,6 @@ export default function Testimonials() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* SECTION HEADER */}
       <div className="t-section-header">
         <span className="t-pre-tag">// VERIFIED EDITORIAL FEEDBACK</span>
         <h2 className="t-title">
@@ -95,7 +100,6 @@ export default function Testimonials() {
         </div>
       </div>
 
-      {/* 3D CAROUSEL STAGE */}
       <div
         className="t-carousel-stage"
         onTouchStart={handleTouchStart}
@@ -107,7 +111,7 @@ export default function Testimonials() {
       >
         <div className="t-stage-glow"></div>
 
-        {/* LEFT CARD (PREV) */}
+        {/* LEFT GHOST CARD */}
         <div
           className="t-card t-card-left"
           onClick={handlePrev}
@@ -115,14 +119,14 @@ export default function Testimonials() {
           tabIndex={0}
         >
           <div className="t-hud-top-bar">
-            <span className="t-rec-text">{testimonials[prev].deliverable}</span>
+            <span className="t-rec-text">{prevItem.deliverable || "REVIEW"}</span>
           </div>
           <p className="t-quote-snippet">
-            "{testimonials[prev].quote.slice(0, 110)}..."
+            "{String(prevItem.quote || "").slice(0, 110)}..."
           </p>
           <div className="t-author-block">
-            <h4 className="t-client-name">{testimonials[prev].name}</h4>
-            <span className="t-client-role">{testimonials[prev].role}</span>
+            <h4 className="t-client-name">{prevItem.name || "Client"}</h4>
+            <span className="t-client-role">{prevItem.role || "Creator"}</span>
           </div>
         </div>
 
@@ -136,7 +140,6 @@ export default function Testimonials() {
               : undefined,
           }}
         >
-          {/* Top Progress Track */}
           <div className="t-card-progress-track">
             <div
               className={`t-card-progress-fill ${isPaused ? "paused" : ""}`}
@@ -144,7 +147,6 @@ export default function Testimonials() {
             ></div>
           </div>
 
-          {/* Top HUD */}
           <div className="t-hud-top-bar">
             <div className="t-rec-indicator">
               <span className="t-rec-dot"></span>
@@ -152,27 +154,25 @@ export default function Testimonials() {
                 CUT {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
               </span>
             </div>
-            <span className="t-hud-aspect">{testimonials[active].deliverable}</span>
+            <span className="t-hud-aspect">{currentItem.deliverable || "DELIVERED"}</span>
           </div>
 
-          {/* Pure Written Testimonial */}
           <blockquote className="t-quote-text">
-            "{testimonials[active].quote}"
+            "{currentItem.quote || ""}"
           </blockquote>
 
-          {/* Author Details Footer */}
           <div className="t-author-footer">
             <div className="t-author-info">
-              <h3 className="t-client-name">{testimonials[active].name}</h3>
-              <p className="t-client-role">{testimonials[active].role}</p>
+              <h3 className="t-client-name">{currentItem.name || "Client"}</h3>
+              <p className="t-client-role">{currentItem.role || "Creator"}</p>
             </div>
             <div className="t-metric-tag">
-              <span>{testimonials[active].metric}</span>
+              <span>{currentItem.metric || "Verified"}</span>
             </div>
           </div>
         </div>
 
-        {/* RIGHT CARD (NEXT) */}
+        {/* RIGHT GHOST CARD */}
         <div
           className="t-card t-card-right"
           onClick={handleNext}
@@ -180,18 +180,17 @@ export default function Testimonials() {
           tabIndex={0}
         >
           <div className="t-hud-top-bar">
-            <span className="t-rec-text">{testimonials[next].deliverable}</span>
+            <span className="t-rec-text">{nextItem.deliverable || "REVIEW"}</span>
           </div>
           <p className="t-quote-snippet">
-            "{testimonials[next].quote.slice(0, 110)}..."
+            "{String(nextItem.quote || "").slice(0, 110)}..."
           </p>
           <div className="t-author-block">
-            <h4 className="t-client-name">{testimonials[next].name}</h4>
-            <span className="t-client-role">{testimonials[next].role}</span>
+            <h4 className="t-client-name">{nextItem.name || "Client"}</h4>
+            <span className="t-client-role">{nextItem.role || "Creator"}</span>
           </div>
         </div>
 
-        {/* ARROWS */}
         <button
           type="button"
           className="t-nav-arrow t-arrow-prev"
@@ -211,7 +210,6 @@ export default function Testimonials() {
         </button>
       </div>
 
-      {/* 8-DOT PAGINATION */}
       <div className="t-pagination-dots">
         {testimonials.map((_, idx) => (
           <button
