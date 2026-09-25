@@ -59,7 +59,7 @@ const TOOL_BADGES = {
 const badgeFor = (tool) =>
   TOOL_BADGES[tool] ?? { abbr: tool.slice(0, 2), tone: "default" };
 
-/* Lightweight SVG icons */
+/* Lightweight SVG Icons */
 const Svg = ({ children, className, ...props }) => (
   <svg
     className={className}
@@ -118,12 +118,15 @@ export default function EditSuite() {
   const activeIndex = projects.findIndex((p) => p.id === activeProject.id);
   const activeNumber = String(activeIndex + 1).padStart(2, "0");
 
-  // Only start playback when the EditSuite section actually scrolls into view
+  // Defer video src assignment and playback until section enters the viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && mainVideoRef.current) {
+            if (!mainVideoRef.current.src) {
+              mainVideoRef.current.src = activeProject.video;
+            }
             mainVideoRef.current
               .play()
               .then(() => setIsPlaying(true))
@@ -134,7 +137,7 @@ export default function EditSuite() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.25 }
     );
 
     if (sectionRef.current) {
@@ -144,8 +147,23 @@ export default function EditSuite() {
     return () => observer.disconnect();
   }, [activeProject]);
 
+  const handleProjectSelect = (project) => {
+    setActiveProject(project);
+    if (mainVideoRef.current) {
+      mainVideoRef.current.src = project.video;
+      mainVideoRef.current.currentTime = 0;
+      mainVideoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
+    }
+  };
+
   const togglePlayback = () => {
     if (!mainVideoRef.current) return;
+    if (!mainVideoRef.current.src) {
+      mainVideoRef.current.src = activeProject.video;
+    }
     if (mainVideoRef.current.paused) {
       mainVideoRef.current.play();
       setIsPlaying(true);
@@ -183,12 +201,12 @@ export default function EditSuite() {
             {activeNumber}
           </div>
 
-          {/* Vertical Reel Player */}
+          {/* Active Reel Preview */}
           <div className="es-reel" onClick={togglePlayback}>
             <video
               ref={mainVideoRef}
-              key={activeProject.video}
-              src={activeProject.video}
+              key={activeProject.id}
+              data-src={activeProject.video}
               className="es-reel-video"
               muted
               loop
@@ -211,7 +229,7 @@ export default function EditSuite() {
             <span className="es-timecode">{activeProject.timecode}</span>
           </div>
 
-          {/* Project Metadata */}
+          {/* Project Details */}
           <div className="es-info">
             <span className="es-label">
               ACTIVE PROJECT // {activeProject.creator}
@@ -257,10 +275,9 @@ export default function EditSuite() {
                   type="button"
                   key={project.id}
                   className={`es-node ${isActive ? "is-active" : ""}`}
-                  onClick={() => setActiveProject(project)}
+                  onClick={() => handleProjectSelect(project)}
                   aria-current={isActive ? "true" : undefined}
                 >
-                  {/* Lazy-Loaded Miniature Node: Only loads video stream on hover */}
                   <span className="es-thumb">
                     <video
                       data-src={`${project.video}?track_id=${project.id}`}

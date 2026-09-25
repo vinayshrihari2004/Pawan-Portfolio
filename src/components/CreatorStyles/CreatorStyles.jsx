@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import "./CreatorStyles.css";
 
-// 6 plain video reels for the 3-column grid
 const VIDEO_ITEMS = [
   { id: 1, title: "Reel 01", videoSrc: "/videos/Aiabdal.mp4" },
   { id: 2, title: "Reel 02", videoSrc: "/videos/Casey.mp4" },
@@ -17,23 +16,34 @@ export default function CreatorStyles() {
   const modalVideoRef = useRef(null);
   const cardVideoRefs = useRef([]);
 
-  // Ensure all 6 grid preview videos reliably autoplay and loop continuously
+  // IntersectionObserver: Only attach video src and play when scrolled into view
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target;
+          if (entry.isIntersecting) {
+            if (!video.src && video.dataset.src) {
+              video.src = video.dataset.src;
+            }
+            video.muted = true;
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
     cardVideoRefs.current.forEach((video) => {
-      if (video) {
-        video.muted = true;
-        video.defaultMuted = true;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Fallback for mobile low-power or data-saver modes
-          });
-        }
-      }
+      if (video) observer.observe(video);
     });
+
+    return () => observer.disconnect();
   }, []);
 
-  // Handle modal keyboard close and modal autoplay
+  // Handle modal keyboard events and playback
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") closeModal();
@@ -43,10 +53,7 @@ export default function CreatorStyles() {
       window.addEventListener("keydown", handleKeyDown);
       if (modalVideoRef.current) {
         modalVideoRef.current.currentTime = 0;
-        const playPromise = modalVideoRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {});
-        }
+        modalVideoRef.current.play().catch(() => {});
       }
     }
 
@@ -69,13 +76,11 @@ export default function CreatorStyles() {
   return (
     <section className="cs-section" id="styles">
       <div className="cs-container">
-        {/* Minimalist Section Header */}
         <div className="cs-header">
           <span className="cs-eyebrow">// EDITORIAL REPERTOIRE</span>
           <h2 className="cs-title">Selected Works</h2>
         </div>
 
-        {/* 6 Plain Cards in a 3-Column Layout (3x2) */}
         <div className="cs-grid-3col">
           {VIDEO_ITEMS.map((item, index) => (
             <div
@@ -87,19 +92,16 @@ export default function CreatorStyles() {
               aria-label={`Open ${item.title}`}
             >
               <div className="cs-card-media">
-                {/* Autoplaying Edge-to-Edge Preview Video */}
                 <video
                   ref={(el) => (cardVideoRefs.current[index] = el)}
-                  src={item.videoSrc}
+                  data-src={item.videoSrc}
                   className="cs-card-video"
                   muted
                   loop
-                  autoPlay
                   playsInline
-                  preload="metadata"
+                  preload="none"
                 />
 
-                {/* Subtle Centered Hover Play Cue */}
                 <div className="cs-play-indicator" aria-hidden="true">
                   <div className="cs-play-disc">
                     <svg viewBox="0 0 24 24" className="cs-play-svg">
@@ -113,7 +115,6 @@ export default function CreatorStyles() {
         </div>
       </div>
 
-      {/* Maximized Lightbox Modal with Frosted Background Blur */}
       {activeVideo &&
         createPortal(
           <div
@@ -126,7 +127,6 @@ export default function CreatorStyles() {
               className="cs-modal-chassis"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
               <button
                 type="button"
                 className="cs-modal-close-btn"
@@ -136,7 +136,6 @@ export default function CreatorStyles() {
                 ✕
               </button>
 
-              {/* 9:16 Video Player with Controls */}
               <div className="cs-modal-viewport">
                 <video
                   ref={modalVideoRef}
