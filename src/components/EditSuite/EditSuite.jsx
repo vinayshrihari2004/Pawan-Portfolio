@@ -111,20 +111,37 @@ const PauseIcon = () => (
 
 export default function EditSuite() {
   const [activeProject, setActiveProject] = useState(projects[0]);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const mainVideoRef = useRef(null);
+  const sectionRef = useRef(null);
 
   const activeIndex = projects.findIndex((p) => p.id === activeProject.id);
   const activeNumber = String(activeIndex + 1).padStart(2, "0");
 
+  // Only start playback when the EditSuite section actually scrolls into view
   useEffect(() => {
-    if (mainVideoRef.current) {
-      mainVideoRef.current.currentTime = 0;
-      mainVideoRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && mainVideoRef.current) {
+            mainVideoRef.current
+              .play()
+              .then(() => setIsPlaying(true))
+              .catch(() => setIsPlaying(false));
+          } else if (mainVideoRef.current) {
+            mainVideoRef.current.pause();
+            setIsPlaying(false);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
+
+    return () => observer.disconnect();
   }, [activeProject]);
 
   const togglePlayback = () => {
@@ -139,7 +156,7 @@ export default function EditSuite() {
   };
 
   return (
-    <section className="edit-suite" id="suite">
+    <section className="edit-suite" id="suite" ref={sectionRef}>
       <div className="es-header">
         <span className="es-header-tag">SELECTED WORKS</span>
         <h2 className="es-title">Edit Suite</h2>
@@ -162,26 +179,21 @@ export default function EditSuite() {
 
         {/* Central Workspace */}
         <div className="es-workspace">
-          {/* Faded Large Ghost Number */}
           <div className="es-ghost" aria-hidden="true">
             {activeNumber}
           </div>
 
-          {/* Autoplaying 9:16 Vertical Reel Frame */}
-          <div 
-            className="es-reel" 
-            onClick={togglePlayback}
-          >
+          {/* Vertical Reel Player */}
+          <div className="es-reel" onClick={togglePlayback}>
             <video
               ref={mainVideoRef}
               key={activeProject.video}
               src={activeProject.video}
               className="es-reel-video"
-              autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
             />
 
             <button
@@ -248,11 +260,17 @@ export default function EditSuite() {
                   onClick={() => setActiveProject(project)}
                   aria-current={isActive ? "true" : undefined}
                 >
-                  {/* Miniature Autoplaying MP4 Card */}
+                  {/* Lazy-Loaded Miniature Node: Only loads video stream on hover */}
                   <span className="es-thumb">
                     <video
-                      src={`${project.video}?track_id=${project.id}`}
-                      autoPlay
+                      data-src={`${project.video}?track_id=${project.id}`}
+                      onMouseEnter={(e) => {
+                        if (!e.target.src) {
+                          e.target.src = e.target.dataset.src;
+                        }
+                        e.target.play().catch(() => {});
+                      }}
+                      onMouseLeave={(e) => e.target.pause()}
                       muted
                       loop
                       playsInline
