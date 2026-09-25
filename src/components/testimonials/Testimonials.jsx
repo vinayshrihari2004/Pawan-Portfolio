@@ -1,18 +1,48 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Testimonials.css";
 import testimonials from "./testimonialsData";
 
+const SLIDE_DURATION = 1000; // 4.5s per review
+
 function Testimonials() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
   const startX = useRef(0);
 
   const total = testimonials.length;
   const prev = (active - 1 + total) % total;
   const next = (active + 1) % total;
 
-  // Touch handlers for mobile
+  const handleNext = useCallback(() => {
+    setActive((curr) => (curr + 1) % total);
+    setProgressKey((k) => k + 1);
+  }, [total]);
+
+  const handlePrev = useCallback(() => {
+    setActive((curr) => (curr - 1 + total) % total);
+    setProgressKey((k) => k + 1);
+  }, [total]);
+
+  const handleSelect = (idx) => {
+    setActive(idx);
+    setProgressKey((k) => k + 1);
+  };
+
+  // Continuous auto-sliding timer with pause on hover/interaction
+  useEffect(() => {
+    if (isPaused || isDragging) return;
+
+    const timer = setInterval(() => {
+      handleNext();
+    }, SLIDE_DURATION);
+
+    return () => clearInterval(timer);
+  }, [isPaused, isDragging, handleNext, progressKey]);
+
+  // Touch handlers
   const handleTouchStart = (e) => {
     startX.current = e.touches[0].clientX;
     setIsDragging(true);
@@ -20,22 +50,18 @@ function Testimonials() {
 
   const handleTouchMove = (e) => {
     if (!isDragging) return;
-    const currentX = e.touches[0].clientX;
-    setDragOffset(currentX - startX.current);
+    setDragOffset(e.touches[0].clientX - startX.current);
   };
 
   const handleTouchEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 50) {
-      setActive(prev);
-    } else if (dragOffset < -50) {
-      setActive(next);
-    }
+    if (dragOffset > 50) handlePrev();
+    else if (dragOffset < -50) handleNext();
     setDragOffset(0);
   };
 
-  // Mouse drag handlers for desktop
+  // Mouse drag handlers
   const handleMouseDown = (e) => {
     startX.current = e.clientX;
     setIsDragging(true);
@@ -43,33 +69,39 @@ function Testimonials() {
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-    const currentX = e.clientX;
-    setDragOffset(currentX - startX.current);
+    setDragOffset(e.clientX - startX.current);
   };
 
   const handleMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 50) {
-      setActive(prev);
-    } else if (dragOffset < -50) {
-      setActive(next);
-    }
+    if (dragOffset > 50) handlePrev();
+    else if (dragOffset < -50) handleNext();
     setDragOffset(0);
   };
 
   return (
-    <section className="testimonials-section" id="testimonials">
+    <section
+      className="testimonials-section"
+      id="testimonials"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* SECTION HEADER */}
       <div className="t-section-header">
-        <span className="t-pre-tag">CLIENT STORIES // 9:16 VERTICAL MASTERS</span>
+        <span className="t-pre-tag">// VERIFIED EDITORIAL FEEDBACK</span>
         <h2 className="t-title">
-          What My <span>Clients Say</span>
+          Client <span>Endorsements</span>
         </h2>
-        <p className="t-sub-hint">SWIPE OR DRAG REELS TO EXPLORE</p>
+        <div className="t-status-row">
+          <span className="t-live-pulse"></span>
+          <p className="t-sub-hint">
+            {isPaused ? "AUTO-CYCLE PAUSED (HOVERED)" : "AUTO-STREAMING LIVE REVIEWS"}
+          </p>
+        </div>
       </div>
 
-      {/* 3D VERTICAL CAROUSEL STAGE */}
+      {/* 3D CAROUSEL STAGE */}
       <div
         className="t-carousel-stage"
         onTouchStart={handleTouchStart}
@@ -78,24 +110,31 @@ function Testimonials() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
       >
         <div className="t-stage-glow"></div>
 
-        {/* LEFT REEL (PREV) */}
+        {/* LEFT GHOST CARD */}
         <div
           className="t-card t-card-left"
-          onClick={() => setActive(prev)}
+          onClick={handlePrev}
           role="button"
           tabIndex={0}
         >
-          <img src={testimonials[prev].thumbnail} alt={testimonials[prev].name} />
-          <div className="t-card-overlay"></div>
-          <div className="t-side-tag">PREV CUT</div>
+          <div className="t-hud-top-bar">
+            <span className="t-rec-text">{testimonials[prev].deliverable}</span>
+          </div>
+          <p className="t-quote-snippet">
+            "{testimonials[prev].quote.slice(0, 110)}..."
+          </p>
+          <div className="t-author-block">
+            <h4 className="t-client-name">{testimonials[prev].name}</h4>
+            <span className="t-client-role">{testimonials[prev].role}</span>
+          </div>
         </div>
 
-        {/* ACTIVE MAIN VERTICAL REEL */}
+        {/* ACTIVE MAIN CARD */}
         <div
+          key={active}
           className={`t-card t-card-active ${isDragging ? "dragging" : ""}`}
           style={{
             transform: isDragging
@@ -103,54 +142,68 @@ function Testimonials() {
               : undefined,
           }}
         >
-          <img src={testimonials[active].thumbnail} alt={testimonials[active].name} />
-          <div className="t-card-overlay"></div>
+          {/* Animated Top Progress Bar */}
+          <div className="t-card-progress-track">
+            <div
+              key={progressKey}
+              className={`t-card-progress-fill ${isPaused ? "paused" : ""}`}
+              style={{ animationDuration: `${SLIDE_DURATION}ms` }}
+            ></div>
+          </div>
 
-          {/* FX3 Top HUD Indicator */}
+          {/* Top HUD */}
           <div className="t-hud-top-bar">
             <div className="t-rec-indicator">
               <span className="t-rec-dot"></span>
-              <span className="t-rec-text">REC // 9:16</span>
+              <span className="t-rec-text">
+                CUT {String(active + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </span>
             </div>
-            <span className="t-hud-aspect">2160 × 3840</span>
+            <span className="t-hud-aspect">{testimonials[active].deliverable}</span>
           </div>
 
-          {/* Center Safe Frame Guides */}
-          <div className="t-safe-frame"></div>
+          {/* Animated Quote */}
+          <blockquote className="t-quote-text">
+            "{testimonials[active].quote}"
+          </blockquote>
 
-          {/* Central Play Trigger */}
-          <div className="t-play-container">
-            <div className="t-play-circle" title="Play Testimonial Reel">
-              <span className="t-play-triangle">▶</span>
+          {/* Author Details Footer */}
+          <div className="t-author-footer">
+            <div className="t-author-info">
+              <h3 className="t-client-name">{testimonials[active].name}</h3>
+              <p className="t-client-role">{testimonials[active].role}</p>
             </div>
-          </div>
-
-          {/* Bottom Client Info */}
-          <div className="t-client-meta">
-            <span className="t-client-spec">CLIENT MASTER DELIVERED</span>
-            <h3 className="t-client-name">{testimonials[active].name}</h3>
-            <p className="t-client-role">{testimonials[active].role}</p>
+            <div className="t-metric-tag">
+              <span>{testimonials[active].metric}</span>
+            </div>
           </div>
         </div>
 
-        {/* RIGHT REEL (NEXT) */}
+        {/* RIGHT GHOST CARD */}
         <div
           className="t-card t-card-right"
-          onClick={() => setActive(next)}
+          onClick={handleNext}
           role="button"
           tabIndex={0}
         >
-          <img src={testimonials[next].thumbnail} alt={testimonials[next].name} />
-          <div className="t-card-overlay"></div>
-          <div className="t-side-tag">NEXT CUT</div>
+          <div className="t-hud-top-bar">
+            <span className="t-rec-text">{testimonials[next].deliverable}</span>
+          </div>
+          <p className="t-quote-snippet">
+            "{testimonials[next].quote.slice(0, 110)}..."
+          </p>
+          <div className="t-author-block">
+            <h4 className="t-client-name">{testimonials[next].name}</h4>
+            <span className="t-client-role">{testimonials[next].role}</span>
+          </div>
         </div>
 
         {/* ARROWS */}
         <button
           type="button"
           className="t-nav-arrow t-arrow-prev"
-          onClick={() => setActive(prev)}
-          aria-label="Previous reel"
+          onClick={handlePrev}
+          aria-label="Previous testimonial"
         >
           ←
         </button>
@@ -158,21 +211,23 @@ function Testimonials() {
         <button
           type="button"
           className="t-nav-arrow t-arrow-next"
-          onClick={() => setActive(next)}
-          aria-label="Next reel"
+          onClick={handleNext}
+          aria-label="Next testimonial"
         >
           →
         </button>
       </div>
 
-      {/* SWIPE DOTS PAGINATION */}
+      {/* 8-DOT PAGINATION */}
       <div className="t-pagination-dots">
         {testimonials.map((_, idx) => (
-          <span
+          <button
+            type="button"
             key={idx}
             className={`t-dot ${idx === active ? "active-dot" : ""}`}
-            onClick={() => setActive(idx)}
-          ></span>
+            onClick={() => handleSelect(idx)}
+            aria-label={`View review ${idx + 1}`}
+          ></button>
         ))}
       </div>
     </section>
