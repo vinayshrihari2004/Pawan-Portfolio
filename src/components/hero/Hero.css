@@ -12,7 +12,7 @@
   justify-content: center;
   padding: 110px 5% 60px;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: clip; /* Modern clipping that respects stage coordinates */
 }
 
 /* Atmospheric Volumetric Backlight */
@@ -169,7 +169,6 @@
 
 /* =========================================================
    RIGHT COLUMN: FRAMELESS CREATOR STAGE
-   Calibrated: Translucent silhouette & bottom alpha fade
    ========================================================= */
 
 .hero-visual-col {
@@ -178,18 +177,18 @@
   align-items: center;
   width: 100%;
   position: relative;
+  overflow: visible; /* Prevents edge clipping of protruding cards */
 }
 
 .hero-frameless-stage {
   position: relative;
   width: 100%;
-  max-width: 580px;
+  max-width: 540px;
   height: 620px;
-  aspect-ratio: 580 / 620; /* Fixed aspect ratio to eliminate layout shift */
-  contain: layout paint;    /* Isolates subtree paint to eliminate CLS */
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  overflow: visible !important; /* CRITICAL: Allows pills to render outside stage box */
 }
 
 /* Backlit Radial Halo behind the portrait */
@@ -222,7 +221,6 @@
   align-items: flex-end;
   justify-content: center;
 
-  /* Dissolves the bottom into background without a hard cut */
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
@@ -239,21 +237,19 @@
   );
 }
 
-/* Cutout Image with Controlled Opacity & Cyan Edge Light */
+/* Cutout Image */
 .hero-frameless-img {
   max-height: 590px;
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
   object-fit: contain;
   object-position: bottom center;
   display: block;
   user-select: none;
   -webkit-user-drag: none;
 
-  /* Reference Opacity Match */
   opacity: 0.76;
 
-  /* Color grading and cyan rim bloom */
   filter: brightness(0.92)
           contrast(1.08)
           drop-shadow(0 0 25px rgba(0, 212, 255, 0.45))
@@ -263,7 +259,6 @@
   transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Subtle Interactive Lift on Hover */
 .hero-frameless-stage:hover .hero-frameless-img {
   opacity: 0.88;
   filter: brightness(1)
@@ -283,18 +278,17 @@
   align-items: center;
   gap: 13px;
   padding: 10px 18px 10px 14px;
-  background: rgba(3, 12, 32, 0.92);
+  background: rgba(3, 12, 32, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1.5px solid rgba(0, 212, 255, 0.5);
   border-radius: 14px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85),
               0 0 20px rgba(0, 212, 255, 0.22);
-  z-index: 5;
+  z-index: 20 !important; /* Promoted above the mask and portrait */
   user-select: none;
   white-space: nowrap;
-  
-  /* GPU Compositing layer to prevent main-thread layout thrashing */
+
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
@@ -309,7 +303,6 @@
               0 0 30px rgba(0, 212, 255, 0.5);
 }
 
-/* Icon Container */
 .pill-icon-svg {
   width: 26px;
   height: 26px;
@@ -325,7 +318,6 @@
   filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
 }
 
-/* Typography */
 .pill-text-wrap {
   display: flex;
   flex-direction: column;
@@ -350,43 +342,43 @@
   line-height: 1;
 }
 
-/* --- EXACT PLACEMENT MATCHING REFERENCE --- */
+/* --- BALANCED PLACEMENT WITH ZERO CLIPPING --- */
 
 /* LEFT FLANK */
 .pill-viral {
   top: 70px;
-  left: -40px;
+  left: -20px;
   animation: floatPillA 6s ease-in-out infinite;
 }
 
 .pill-shorts {
   top: 240px;
-  left: -65px;
+  left: -40px;
   animation: floatPillB 7s ease-in-out infinite;
 }
 
 .pill-talking {
   bottom: 60px;
-  left: -45px;
+  left: -25px;
   animation: floatPillC 8s ease-in-out infinite;
 }
 
 /* RIGHT FLANK */
 .pill-podcast {
-  top: 100px;
-  right: -45px;
+  top: 90px;
+  right: -25px;
   animation: floatPillB 6.5s ease-in-out infinite;
 }
 
 .pill-sound {
-  top: 270px;
-  right: -60px;
+  top: 260px;
+  right: -40px;
   animation: floatPillA 7.5s ease-in-out infinite;
 }
 
 .pill-kinetic {
   bottom: 50px;
-  right: -40px;
+  right: -25px;
   animation: floatPillC 8.5s ease-in-out infinite;
 }
 
@@ -414,12 +406,12 @@
   .hero-grid-container {
     gap: 1.5rem;
   }
-  .pill-viral { left: -10px; }
-  .pill-shorts { left: -25px; }
-  .pill-talking { left: -15px; }
-  .pill-podcast { right: -15px; }
-  .pill-sound { right: -25px; }
-  .pill-kinetic { right: -15px; }
+  .pill-viral { left: 0px; }
+  .pill-shorts { left: -15px; }
+  .pill-talking { left: -5px; }
+  .pill-podcast { right: -5px; }
+  .pill-sound { right: -15px; }
+  .pill-kinetic { right: -5px; }
 }
 
 @media (max-width: 1024px) {
@@ -448,7 +440,6 @@
   .hero-frameless-stage {
     max-width: 440px;
     height: 520px;
-    aspect-ratio: 440 / 520;
   }
 
   .hero-frameless-img {
@@ -464,14 +455,12 @@
   .hero-frameless-stage {
     max-width: 320px;
     height: 460px;
-    aspect-ratio: 320 / 460;
   }
 
   .hero-frameless-img {
     max-height: 420px;
   }
 
-  /* Compact pill dimensions for small screens */
   .pill-hardware-card {
     padding: 7px 12px;
     gap: 9px;
@@ -518,7 +507,6 @@
   .hero-frameless-stage {
     max-width: 270px;
     height: 400px;
-    aspect-ratio: 270 / 400;
   }
 
   .hero-frameless-img {
