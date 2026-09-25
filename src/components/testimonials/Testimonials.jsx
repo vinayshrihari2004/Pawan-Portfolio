@@ -2,14 +2,13 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Testimonials.css";
 import testimonials from "./testimonialsData";
 
-const SLIDE_DURATION = 1000; // 4.5s per review
+const SLIDE_DURATION = 1000; // 1-second fast cycle interval
 
-function Testimonials() {
+export default function Testimonials() {
   const [active, setActive] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [progressKey, setProgressKey] = useState(0);
   const startX = useRef(0);
 
   const total = testimonials.length;
@@ -18,20 +17,13 @@ function Testimonials() {
 
   const handleNext = useCallback(() => {
     setActive((curr) => (curr + 1) % total);
-    setProgressKey((k) => k + 1);
   }, [total]);
 
   const handlePrev = useCallback(() => {
     setActive((curr) => (curr - 1 + total) % total);
-    setProgressKey((k) => k + 1);
   }, [total]);
 
-  const handleSelect = (idx) => {
-    setActive(idx);
-    setProgressKey((k) => k + 1);
-  };
-
-  // Continuous auto-sliding timer with pause on hover/interaction
+  // Fast 1-second auto-slide interval (pauses while hovering or dragging)
   useEffect(() => {
     if (isPaused || isDragging) return;
 
@@ -40,9 +32,9 @@ function Testimonials() {
     }, SLIDE_DURATION);
 
     return () => clearInterval(timer);
-  }, [isPaused, isDragging, handleNext, progressKey]);
+  }, [isPaused, isDragging, handleNext]);
 
-  // Touch handlers
+  // Touch handlers for mobile devices
   const handleTouchStart = (e) => {
     startX.current = e.touches[0].clientX;
     setIsDragging(true);
@@ -56,12 +48,12 @@ function Testimonials() {
   const handleTouchEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 50) handlePrev();
-    else if (dragOffset < -50) handleNext();
+    if (dragOffset > 40) handlePrev();
+    else if (dragOffset < -40) handleNext();
     setDragOffset(0);
   };
 
-  // Mouse drag handlers
+  // Mouse drag handlers for desktop
   const handleMouseDown = (e) => {
     startX.current = e.clientX;
     setIsDragging(true);
@@ -75,10 +67,12 @@ function Testimonials() {
   const handleMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 50) handlePrev();
-    else if (dragOffset < -50) handleNext();
+    if (dragOffset > 40) handlePrev();
+    else if (dragOffset < -40) handleNext();
     setDragOffset(0);
   };
+
+  if (!testimonials || testimonials.length === 0) return null;
 
   return (
     <section
@@ -96,7 +90,7 @@ function Testimonials() {
         <div className="t-status-row">
           <span className="t-live-pulse"></span>
           <p className="t-sub-hint">
-            {isPaused ? "AUTO-CYCLE PAUSED (HOVERED)" : "AUTO-STREAMING LIVE REVIEWS"}
+            {isPaused ? "AUTO-CYCLE PAUSED (HOVERED)" : "1S HIGH-SPEED STREAMING"}
           </p>
         </div>
       </div>
@@ -113,7 +107,7 @@ function Testimonials() {
       >
         <div className="t-stage-glow"></div>
 
-        {/* LEFT GHOST CARD */}
+        {/* LEFT CARD (PREV) */}
         <div
           className="t-card t-card-left"
           onClick={handlePrev}
@@ -142,10 +136,9 @@ function Testimonials() {
               : undefined,
           }}
         >
-          {/* Animated Top Progress Bar */}
+          {/* Top Progress Track */}
           <div className="t-card-progress-track">
             <div
-              key={progressKey}
               className={`t-card-progress-fill ${isPaused ? "paused" : ""}`}
               style={{ animationDuration: `${SLIDE_DURATION}ms` }}
             ></div>
@@ -162,7 +155,7 @@ function Testimonials() {
             <span className="t-hud-aspect">{testimonials[active].deliverable}</span>
           </div>
 
-          {/* Animated Quote */}
+          {/* Pure Written Testimonial */}
           <blockquote className="t-quote-text">
             "{testimonials[active].quote}"
           </blockquote>
@@ -179,7 +172,7 @@ function Testimonials() {
           </div>
         </div>
 
-        {/* RIGHT GHOST CARD */}
+        {/* RIGHT CARD (NEXT) */}
         <div
           className="t-card t-card-right"
           onClick={handleNext}
@@ -225,7 +218,7 @@ function Testimonials() {
             type="button"
             key={idx}
             className={`t-dot ${idx === active ? "active-dot" : ""}`}
-            onClick={() => handleSelect(idx)}
+            onClick={() => setActive(idx)}
             aria-label={`View review ${idx + 1}`}
           ></button>
         ))}
@@ -233,5 +226,3 @@ function Testimonials() {
     </section>
   );
 }
-
-export default Testimonials;

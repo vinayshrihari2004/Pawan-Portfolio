@@ -1,5 +1,6 @@
 /* =========================================================
-   ANIMATED AUTO-SLIDING TESTIMONIALS // SONY FX3 CINEMA NLE
+   PURE WRITTEN TESTIMONIALS (ZERO IMAGES / ZERO STARS)
+   Optimized for High-Speed 1s Auto-Rotation Cycle
    Theme: Cyan (#00D4FF) to Deep Navy (#010714)
    ========================================================= */
 
@@ -15,10 +16,10 @@
   overflow: clip;
 }
 
-/* HEADER & STATUS PULSE */
+/* HEADER & LIVE STATUS */
 .t-section-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 35px;
   position: relative;
   z-index: 2;
 }
@@ -65,7 +66,7 @@
   border-radius: 50%;
   background: #00d4ff;
   box-shadow: 0 0 8px #00d4ff;
-  animation: tPulse 1.8s infinite ease-in-out;
+  animation: tPulse 1.4s infinite ease-in-out;
 }
 
 @keyframes tPulse {
@@ -81,7 +82,7 @@
   margin: 0;
 }
 
-/* CAROUSEL STAGE & VOLUMETRIC GLOW */
+/* CAROUSEL STAGE */
 .t-carousel-stage {
   position: relative;
   width: 100%;
@@ -125,12 +126,13 @@
   box-sizing: border-box;
   transform: translateZ(0);
   will-change: transform, opacity;
+  /* Shortened transition to handle 1s fast rotation */
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.2s ease;
 }
 
-/* ACTIVE MAIN CARD WITH SCANLINE & ENTRANCE ANIMATION */
+/* ACTIVE MAIN CARD */
 .t-card.t-card-active {
   width: 620px;
   min-height: 320px;
@@ -145,13 +147,14 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  /* Snappy 0.25s entrance */
   animation: cardEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes cardEntrance {
   from {
     opacity: 0.6;
-    transform: translateX(-50%) scale(0.96) translateY(8px);
+    transform: translateX(-50%) scale(0.96) translateY(6px);
   }
   to {
     opacity: 1;
@@ -170,7 +173,7 @@
               0 0 45px rgba(0, 212, 255, 0.35);
 }
 
-/* CINEMA PROGRESS BAR */
+/* 1-SECOND PROGRESS BAR */
 .t-card-progress-track {
   position: absolute;
   top: 0;
@@ -331,7 +334,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ARROW BUTTONS */
+/* ARROWS */
 .t-nav-arrow {
   position: absolute;
   width: 46px;
@@ -346,7 +349,7 @@
   justify-content: center;
   backdrop-filter: blur(14px);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   z-index: 20;
 }
 
@@ -361,7 +364,7 @@
 .t-arrow-prev { left: 4%; }
 .t-arrow-next { right: 4%; }
 
-/* 8-DOT PAGINATION */
+/* PAGINATION DOTS */
 .t-pagination-dots {
   display: flex;
   gap: 8px;
@@ -377,7 +380,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .t-dot.active-dot {
