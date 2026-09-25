@@ -6,31 +6,27 @@ import Testimonials from "./components/testimonials/Testimonials";
 import CreatorStyles from "./components/CreatorStyles/CreatorStyles";
 import EditSuite from "./components/EditSuite/EditSuite";
 import CaseStudies from "./components/CaseStudies/CaseStudies";
-import BookingSection from "./components/booking/BookingSection"; // Live Calendly Terminal
+import BookingSection from "./components/booking/BookingSection";
 import AboutMe from "./components/AboutMe/AboutMe";
 import Footer from "./components/layout/Footer";
+import { useAntiInspect } from "./hooks/useAntiInspect";
 import "./App.css";
 
 function App() {
+  useAntiInspect();
+
   return (
     <div className="portfolio-app-root">
-      {/* Top Sony FX3 HUD Status Bar */}
       <Navbar />
-
-      {/* Desktop Right Rail / Mobile Bottom Dock Navigation */}
       <LensScale />
 
-      {/* Main Page Content Body */}
       <main className="app-main-content">
         <Hero />
         <Testimonials />
         <CreatorStyles />
         <EditSuite />
         <CaseStudies />
-
-        {/* Active 15-Min Commission & Calendly Terminal (Target of #cta buttons) */}
         <BookingSection />
-
         <AboutMe />
         <Footer />
       </main>
