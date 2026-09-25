@@ -9,13 +9,9 @@ import CaseStudies from "./components/CaseStudies/CaseStudies";
 import BookingSection from "./components/booking/BookingSection"; // Live Calendly Terminal
 import AboutMe from "./components/AboutMe/AboutMe";
 import Footer from "./components/layout/Footer";
-import { useAntiInspect } from "./hooks/useAntiInspect"; // Anti-inspect & DevTools trap hook
 import "./App.css";
 
 function App() {
-  // Activate client-side inspection blockers & debugger trap
-  useAntiInspect();
-
   return (
     <div className="portfolio-app-root">
       {/* Top Sony FX3 HUD Status Bar */}
