@@ -1,37 +1,36 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import Navbar from "./components/layout/Navbar";
 import LensScale from "./components/layout/LensScale";
 import Hero from "./components/hero/Hero";
 import Testimonials from "./components/testimonials/Testimonials";
 import CreatorStyles from "./components/CreatorStyles/CreatorStyles";
-import EditSuite from "./components/EditSuite/EditSuite";
-import CaseStudies from "./components/CaseStudies/CaseStudies";
-import BookingSection from "./components/booking/BookingSection";
-import AboutMe from "./components/AboutMe/AboutMe";
 import Footer from "./components/layout/Footer";
 import "./App.css";
+
+// Lazy-load heavier below-the-fold sections
+const EditSuite = lazy(() => import("./components/EditSuite/EditSuite"));
+const CaseStudies = lazy(() => import("./components/CaseStudies/CaseStudies"));
+const BookingSection = lazy(() => import("./components/booking/BookingSection"));
+const AboutMe = lazy(() => import("./components/AboutMe/AboutMe"));
 
 function App() {
   return (
     <div className="portfolio-app-root">
-      {/* Top Sony FX3 HUD Status Bar */}
       <Navbar />
-
-      {/* Desktop Right Rail / Mobile Bottom Dock Navigation */}
       <LensScale />
 
-      {/* Main Page Content Body */}
       <main className="app-main-content">
         <Hero />
         <Testimonials />
         <CreatorStyles />
-        <EditSuite />
-        <CaseStudies />
 
-        {/* Active 15-Min Commission & Calendly Terminal */}
-        <BookingSection />
+        <Suspense fallback={<div style={{ minHeight: "300px" }} />}>
+          <EditSuite />
+          <CaseStudies />
+          <BookingSection />
+          <AboutMe />
+        </Suspense>
 
-        <AboutMe />
         <Footer />
       </main>
     </div>

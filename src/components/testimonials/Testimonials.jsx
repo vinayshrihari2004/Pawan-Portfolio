@@ -2,18 +2,21 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Testimonials.css";
 import testimonials from "./testimonialsData";
 
-const SLIDE_DURATION = 1000; // 1-second auto-slide interval
+const SLIDE_DURATION = 1000;
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+
+  const containerRef = useRef(null);
   const startX = useRef(0);
+  const startY = useRef(0);
+  const isHorizontalSwipe = useRef(null);
 
   const total = Array.isArray(testimonials) ? testimonials.length : 0;
-
-  // Defensive check: don't render if data array is empty or undefined
   if (total === 0) return null;
 
   const prev = (active - 1 + total) % total;
@@ -31,57 +34,70 @@ export default function Testimonials() {
     setActive((curr) => (curr - 1 + total) % total);
   }, [total]);
 
-  // Auto-slide interval
+  // Only run the 1s interval when this section is actively on screen
   useEffect(() => {
-    if (isPaused || isDragging || total <= 1) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.15 }
+    );
+
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isInView || isPaused || isDragging || total <= 1) return;
 
     const timer = setInterval(() => {
       handleNext();
     }, SLIDE_DURATION);
 
     return () => clearInterval(timer);
-  }, [isPaused, isDragging, handleNext, total]);
+  }, [isInView, isPaused, isDragging, handleNext, total]);
 
-  // Touch handlers
+  // Directional touch handlers
   const handleTouchStart = (e) => {
     startX.current = e.touches[0].clientX;
-    setIsDragging(true);
+    startY.current = e.touches[0].clientY;
+    isHorizontalSwipe.current = null;
+    setIsPaused(true);
   };
 
   const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    setDragOffset(e.touches[0].clientX - startX.current);
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const deltaX = currentX - startX.current;
+    const deltaY = currentY - startY.current;
+
+    if (isHorizontalSwipe.current === null) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        isHorizontalSwipe.current = true;
+        setIsDragging(true);
+      } else if (Math.abs(deltaY) > 10) {
+        isHorizontalSwipe.current = false;
+      }
+    }
+
+    if (isHorizontalSwipe.current) {
+      setDragOffset(deltaX);
+    }
   };
 
   const handleTouchEnd = () => {
+    setIsPaused(false);
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 40) handlePrev();
-    else if (dragOffset < -40) handleNext();
+
+    if (dragOffset > 35) handlePrev();
+    else if (dragOffset < -35) handleNext();
+
     setDragOffset(0);
-  };
-
-  // Mouse drag handlers
-  const handleMouseDown = (e) => {
-    startX.current = e.clientX;
-    setIsDragging(true);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    setDragOffset(e.clientX - startX.current);
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    if (dragOffset > 40) handlePrev();
-    else if (dragOffset < -40) handleNext();
-    setDragOffset(0);
+    isHorizontalSwipe.current = null;
   };
 
   return (
     <section
+      ref={containerRef}
       className="testimonials-section"
       id="testimonials"
       onMouseEnter={() => setIsPaused(true)}
@@ -95,7 +111,7 @@ export default function Testimonials() {
         <div className="t-status-row">
           <span className="t-live-pulse"></span>
           <p className="t-sub-hint">
-            {isPaused ? "AUTO-CYCLE PAUSED (HOVERED)" : "1S HIGH-SPEED STREAMING"}
+            {isPaused ? "AUTO-CYCLE PAUSED" : "1S AUTO-CYCLE ACTIVE"}
           </p>
         </div>
       </div>
@@ -105,19 +121,11 @@ export default function Testimonials() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
       >
         <div className="t-stage-glow"></div>
 
         {/* LEFT GHOST CARD */}
-        <div
-          className="t-card t-card-left"
-          onClick={handlePrev}
-          role="button"
-          tabIndex={0}
-        >
+        <div className="t-card t-card-left" onClick={handlePrev} role="button" tabIndex={0}>
           <div className="t-hud-top-bar">
             <span className="t-rec-text">{prevItem.deliverable || "REVIEW"}</span>
           </div>
@@ -173,12 +181,7 @@ export default function Testimonials() {
         </div>
 
         {/* RIGHT GHOST CARD */}
-        <div
-          className="t-card t-card-right"
-          onClick={handleNext}
-          role="button"
-          tabIndex={0}
-        >
+        <div className="t-card t-card-right" onClick={handleNext} role="button" tabIndex={0}>
           <div className="t-hud-top-bar">
             <span className="t-rec-text">{nextItem.deliverable || "REVIEW"}</span>
           </div>
@@ -191,21 +194,10 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="t-nav-arrow t-arrow-prev"
-          onClick={handlePrev}
-          aria-label="Previous testimonial"
-        >
+        <button type="button" className="t-nav-arrow t-arrow-prev" onClick={handlePrev} aria-label="Previous">
           ←
         </button>
-
-        <button
-          type="button"
-          className="t-nav-arrow t-arrow-next"
-          onClick={handleNext}
-          aria-label="Next testimonial"
-        >
+        <button type="button" className="t-nav-arrow t-arrow-next" onClick={handleNext} aria-label="Next">
           →
         </button>
       </div>
