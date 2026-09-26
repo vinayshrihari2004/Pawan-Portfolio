@@ -1,5 +1,5 @@
 /* =========================================================
-   HERO SECTION // SONY FX3 CINEMA RIG
+   HERO SECTION // SONY FX3 CINEMA RIG (PERF-OPTIMIZED)
    Theme: Cyan (#00D4FF) to Deep Navy (#010714)
    ========================================================= */
 
@@ -12,7 +12,7 @@
   justify-content: center;
   padding: 110px 5% 60px;
   box-sizing: border-box;
-  overflow: clip; /* Modern clipping that respects stage coordinates */
+  overflow: clip;
 }
 
 /* Atmospheric Volumetric Backlight */
@@ -21,15 +21,15 @@
   top: 20%;
   left: 50%;
   transform: translate3d(-50%, -20%, 0);
-  width: 750px;
-  height: 750px;
+  width: 650px;
+  height: 650px;
   background: radial-gradient(
     circle,
-    rgba(0, 212, 255, 0.12) 0%,
+    rgba(0, 212, 255, 0.1) 0%,
     rgba(2, 13, 36, 0.05) 50%,
     transparent 70%
   );
-  filter: blur(120px);
+  filter: blur(90px);
   pointer-events: none;
   z-index: 0;
 }
@@ -55,7 +55,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.6rem;
+  gap: 1.5rem;
 }
 
 .hero-telemetry-badge {
@@ -136,7 +136,7 @@
   border: 1px solid rgba(0, 212, 255, 0.2);
   border-radius: 6px;
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
-  margin-top: 0.8rem;
+  margin-top: 0.6rem;
 }
 
 .metric-chip {
@@ -177,18 +177,18 @@
   align-items: center;
   width: 100%;
   position: relative;
-  overflow: visible; /* Prevents edge clipping of protruding cards */
+  overflow: visible;
 }
 
 .hero-frameless-stage {
   position: relative;
   width: 100%;
-  max-width: 540px;
-  height: 620px;
+  max-width: 520px;
+  height: 600px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  overflow: visible !important; /* CRITICAL: Allows pills to render outside stage box */
+  overflow: visible !important;
 }
 
 /* Backlit Radial Halo behind the portrait */
@@ -198,15 +198,15 @@
   top: 15%;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 360px;
-  height: 460px;
+  width: 340px;
+  height: 440px;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 212, 255, 0.28) 0%,
-    rgba(0, 160, 255, 0.12) 40%,
-    transparent 72%
+    rgba(0, 212, 255, 0.25) 0%,
+    rgba(0, 160, 255, 0.1) 40%,
+    transparent 70%
   );
-  filter: blur(45px);
+  filter: blur(40px);
   pointer-events: none;
   z-index: 1;
 }
@@ -224,22 +224,22 @@
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 68%,
+    rgba(0, 0, 0, 1) 70%,
     rgba(0, 0, 0, 0.45) 86%,
     rgba(0, 0, 0, 0) 100%
   );
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 68%,
+    rgba(0, 0, 0, 1) 70%,
     rgba(0, 0, 0, 0.45) 86%,
     rgba(0, 0, 0, 0) 100%
   );
 }
 
-/* Cutout Image */
+/* Cutout Image (LCP optimized) */
 .hero-frameless-img {
-  max-height: 590px;
+  max-height: 580px;
   width: auto;
   height: 100%;
   object-fit: contain;
@@ -248,64 +248,42 @@
   user-select: none;
   -webkit-user-drag: none;
 
-  opacity: 0.76;
-
-  filter: brightness(0.92)
-          contrast(1.08)
-          drop-shadow(0 0 25px rgba(0, 212, 255, 0.45))
-          drop-shadow(0 15px 45px rgba(0, 0, 0, 0.9));
-
-  transform: translate3d(0, 0, 0);
-  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-frameless-stage:hover .hero-frameless-img {
   opacity: 0.88;
-  filter: brightness(1)
-          contrast(1.1)
-          drop-shadow(0 0 35px rgba(0, 212, 255, 0.65))
-          drop-shadow(0 20px 50px rgba(0, 0, 0, 0.95));
-  transform: translateY(-6px) scale(1.015);
+  filter: brightness(0.96)
+          contrast(1.05)
+          drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
+
+  transform: translateZ(0);
 }
 
 /* =========================================================
-   AUTHENTIC REFERENCE HARDWARE PILL CARDS
+   HARDWARE PILL CARDS (DESKTOP)
    ========================================================= */
 
 .pill-hardware-card {
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 13px;
-  padding: 10px 18px 10px 14px;
+  gap: 12px;
+  padding: 9px 16px 9px 13px;
   background: rgba(3, 12, 32, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1.5px solid rgba(0, 212, 255, 0.5);
-  border-radius: 14px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85),
-              0 0 20px rgba(0, 212, 255, 0.22);
-  z-index: 20 !important; /* Promoted above the mask and portrait */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(0, 212, 255, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85),
+              0 0 15px rgba(0, 212, 255, 0.2);
+  z-index: 20 !important;
   user-select: none;
   white-space: nowrap;
 
   transform: translateZ(0);
   will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.pill-hardware-card:hover {
-  border-color: #00d4ff;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9),
-              0 0 30px rgba(0, 212, 255, 0.5);
 }
 
 .pill-icon-svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +293,6 @@
 .pill-icon-svg svg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
 }
 
 .pill-text-wrap {
@@ -326,7 +303,7 @@
 
 .pill-head {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.8px;
   color: #ffffff;
@@ -342,95 +319,47 @@
   line-height: 1;
 }
 
-/* --- BALANCED PLACEMENT WITH ZERO CLIPPING --- */
+/* Placements */
+.pill-viral   { top: 70px;  left: -15px; animation: floatPillA 6s ease-in-out infinite; }
+.pill-shorts  { top: 235px; left: -35px; animation: floatPillB 7s ease-in-out infinite; }
+.pill-talking { bottom: 60px; left: -20px; animation: floatPillC 8s ease-in-out infinite; }
 
-/* LEFT FLANK */
-.pill-viral {
-  top: 70px;
-  left: -20px;
-  animation: floatPillA 6s ease-in-out infinite;
-}
+.pill-podcast { top: 90px;  right: -20px; animation: floatPillB 6.5s ease-in-out infinite; }
+.pill-sound   { top: 255px; right: -35px; animation: floatPillA 7.5s ease-in-out infinite; }
+.pill-kinetic { bottom: 50px; right: -20px; animation: floatPillC 8.5s ease-in-out infinite; }
 
-.pill-shorts {
-  top: 240px;
-  left: -40px;
-  animation: floatPillB 7s ease-in-out infinite;
-}
-
-.pill-talking {
-  bottom: 60px;
-  left: -25px;
-  animation: floatPillC 8s ease-in-out infinite;
-}
-
-/* RIGHT FLANK */
-.pill-podcast {
-  top: 90px;
-  right: -25px;
-  animation: floatPillB 6.5s ease-in-out infinite;
-}
-
-.pill-sound {
-  top: 260px;
-  right: -40px;
-  animation: floatPillA 7.5s ease-in-out infinite;
-}
-
-.pill-kinetic {
-  bottom: 50px;
-  right: -25px;
-  animation: floatPillC 8.5s ease-in-out infinite;
-}
-
-/* Hardware Accelerated Keyframes */
 @keyframes floatPillA {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -8px, 0); }
-}
-
-@keyframes floatPillB {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, 8px, 0); }
-}
-
-@keyframes floatPillC {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, -6px, 0); }
 }
 
-/* =========================================================
-   RESPONSIVE DESIGN (Tablets & Mobile)
-   ========================================================= */
-
-@media (max-width: 1180px) {
-  .hero-grid-container {
-    gap: 1.5rem;
-  }
-  .pill-viral { left: 0px; }
-  .pill-shorts { left: -15px; }
-  .pill-talking { left: -5px; }
-  .pill-podcast { right: -5px; }
-  .pill-sound { right: -15px; }
-  .pill-kinetic { right: -5px; }
+@keyframes floatPillB {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 6px, 0); }
 }
+
+@keyframes floatPillC {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -5px, 0); }
+}
+
+/* =========================================================
+   TABLETS & MEDIUM SCREENS
+   ========================================================= */
 
 @media (max-width: 1024px) {
   .hero-section {
-    padding-top: 100px;
+    padding-top: 95px;
   }
 
   .hero-grid-container {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 3.5rem;
+    gap: 3rem;
   }
 
   .hero-content-col {
     align-items: center;
-  }
-
-  .hero-lead-text {
-    max-width: 580px;
   }
 
   .hero-metrics-ribbon {
@@ -439,63 +368,106 @@
 
   .hero-frameless-stage {
     max-width: 440px;
-    height: 520px;
+    height: 510px;
   }
 
   .hero-frameless-img {
-    max-height: 500px;
+    max-height: 480px;
   }
 }
 
-@media (max-width: 640px) {
+/* =========================================================
+   MOBILE HARDWARE OPTIMIZATIONS (Eliminates TBT & Reflow)
+   ========================================================= */
+
+@media (max-width: 768px) {
   .hero-section {
-    padding: 85px 4% 50px;
+    padding: 75px 4% 40px;
+    min-height: auto;
+  }
+
+  /* Drop heavy ambient blur on low-end mobile GPUs */
+  .hero-ambient-glow {
+    width: 320px;
+    height: 320px;
+    filter: blur(50px);
+  }
+
+  .hero-cutout-wrapper::before {
+    display: none; /* Strip overlapping multi-layer radial gradient */
   }
 
   .hero-frameless-stage {
-    max-width: 320px;
-    height: 460px;
+    max-width: 300px;
+    height: 410px;
   }
 
   .hero-frameless-img {
-    max-height: 420px;
+    max-height: 380px;
+    filter: brightness(0.96) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.85));
   }
 
+  /* Kill continuous CPU keyframe cycles on mobile */
+  .pill-viral,
+  .pill-shorts,
+  .pill-talking,
+  .pill-podcast,
+  .pill-sound,
+  .pill-kinetic {
+    animation: none !important;
+  }
+
+  /* Hide lower 4 pills on small screens to slash DOM weight & forced reflow */
+  .pill-talking,
+  .pill-sound,
+  .pill-kinetic,
+  .pill-shorts {
+    display: none !important;
+  }
+
+  /* Keep just the top 2 primary signature badges static & compact */
   .pill-hardware-card {
-    padding: 7px 12px;
-    gap: 9px;
-    border-radius: 10px;
+    padding: 6px 12px;
+    gap: 8px;
+    border-radius: 9px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #030c20;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+  }
+
+  .pill-viral {
+    top: 15px;
+    left: -10px;
+  }
+
+  .pill-podcast {
+    top: 40px;
+    right: -10px;
   }
 
   .pill-icon-svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   .pill-head {
-    font-size: max(12px, 0.7rem);
-  }
-
-  .pill-subhead {
     font-size: 12px;
   }
 
-  .pill-viral { top: 25px; left: 0; }
-  .pill-shorts { top: 165px; left: -10px; }
-  .pill-talking { bottom: 20px; left: 0; }
-
-  .pill-podcast { top: 55px; right: 0; }
-  .pill-sound { top: 195px; right: -10px; }
-  .pill-kinetic { bottom: 30px; right: 0; }
+  .pill-subhead {
+    font-size: 11px;
+  }
 
   .hero-metrics-ribbon {
     width: 100%;
     justify-content: space-around;
-    padding: 10px;
+    padding: 10px 8px;
+    gap: 8px;
   }
 
   .metric-val {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 }
 
@@ -505,11 +477,11 @@
   }
 
   .hero-frameless-stage {
-    max-width: 270px;
-    height: 400px;
+    max-width: 260px;
+    height: 360px;
   }
 
   .hero-frameless-img {
-    max-height: 360px;
+    max-height: 330px;
   }
 }

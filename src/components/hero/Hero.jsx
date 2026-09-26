@@ -51,7 +51,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: FRAMELESS CREATOR CUTOUT WITH BLENDED OPACITY & RIM LIGHT */}
+        {/* RIGHT COLUMN: FRAMELESS CREATOR CUTOUT */}
         <div className="hero-visual-col">
           <div className="hero-frameless-stage">
             <div className="hero-cutout-wrapper">
