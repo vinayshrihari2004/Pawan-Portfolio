@@ -5,7 +5,6 @@ import "./Hero.css";
 export default function Hero() {
   return (
     <section className="hero-section" id="hero">
-      {/* Background Volumetric Glow */}
       <div className="hero-ambient-glow" aria-hidden="true"></div>
 
       <div className="hero-grid-container">
@@ -19,9 +18,9 @@ export default function Hero() {
           </div>
 
           <h1 className="hero-main-title">
-            Crafting Videos That
-            <span className="hero-gradient-text"> Capture Attention </span>
-            &amp; Drive Results
+            <span className="hero-title-top">Crafting Videos That</span>
+            <span className="hero-gradient-text">Capture Attention</span>
+            <span className="hero-title-bottom">&amp; Drive Results</span>
           </h1>
 
           <p className="hero-lead-text">
@@ -67,9 +66,7 @@ export default function Hero() {
               />
             </div>
 
-            {/* --- 6 BRANDED CARDS --- */}
-
-            {/* 1. VIRAL ANIMATIONS */}
+            {/* ALL 6 BRANDED HARDWARE PILLS */}
             <div className="pill-hardware-card pill-viral">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
@@ -84,7 +81,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 2. YOUTUBE SHORTS */}
             <div className="pill-hardware-card pill-shorts">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,7 +94,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 3. TALKING HEAD VIDEOS */}
             <div className="pill-hardware-card pill-talking">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -112,7 +107,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 4. PODCAST CLIPS */}
             <div className="pill-hardware-card pill-podcast">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -127,7 +121,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 5. SOUND DESIGN */}
             <div className="pill-hardware-card pill-sound">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -145,7 +138,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 6. KINETIC MOTION */}
             <div className="pill-hardware-card pill-kinetic">
               <div className="pill-icon-svg" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

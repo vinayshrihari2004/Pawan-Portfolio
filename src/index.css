@@ -1,3 +1,25 @@
+@media (max-width: 768px) {
+  small,
+  span,
+  p,
+  ... {
+    min-font-size: 12px;
+    font-size: max(12px, 0.75rem);
+  }
+}
+```[cite: 23]
+
+Because `<span className="hero-gradient-text">Capture Attention</span>` is a `span`, this universal selector overrides the title styling on mobile and forces the text down to `12px`[cite: 17, 21, 23]. This caused the text to shrink, collapse lines, and collide with adjacent elements[cite: 15, 18, 19].
+
+Below are the complete, cleaned files that eliminate this conflict and establish a responsive typography and hero setup.
+
+---
+
+### 1. `src/index.css`
+
+Scope the font-size safeguard to small UI utility classes instead of targeting generic HTML elements (`span`, `p`) globally:
+
+```css
 :root {
   --background: #020024;
   --surface: rgba(255, 255, 255, 0.05);
@@ -19,7 +41,7 @@
 }
 
 /* =========================================================
-   ANTI-INSPECT, ASSET SHIELD & MOBILE CALLOUT PREVENTION
+   ASSET SHIELD & MOBILE TOUCH PREVENTIONS
    ========================================================= */
 *,
 *::before,
@@ -112,7 +134,7 @@ body::before {
 }
 
 /* =========================================================
-   3. MOBILE ADAPTATIONS & FONT LEGIBILITY (LIGHTHOUSE 100)
+   3. MOBILE ADAPTATIONS
    ========================================================= */
 @media (max-width: 768px) {
   .app-main-content {
@@ -124,11 +146,7 @@ body::before {
     word-break: break-word;
   }
 
-  /* Ensures micro-labels never drop below the 12px mobile readability threshold */
-  small,
-  span,
-  p,
-  figcaption,
+  /* Scoped only to specific micro-labels, never global tags */
   .cs-eyebrow,
   .es-header-tag,
   .es-label,
@@ -136,13 +154,12 @@ body::before {
   .es-node-num,
   .es-node-title,
   .es-pill {
-    min-font-size: 12px;
     font-size: max(12px, 0.75rem);
   }
 }
 
 /* =========================================================
-   4. DEFENSIVE UTILITIES & SCROLLBAR
+   4. UTILITIES & SCROLLBAR
    ========================================================= */
 a {
   text-decoration: none;
@@ -186,7 +203,7 @@ ul {
 }
 
 /* =========================================================
-   5. HARDWARE ACCELERATION & ZERO-LAG COMPOSITING
+   5. COMPOSITING ACCELERATION
    ========================================================= */
 .vrail-container,
 .fx3-navbar,
